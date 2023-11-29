@@ -128,7 +128,7 @@ class Video(models.Model):
         help_text='видеофайл',
     )
     image = models.ImageField(
-        upload_to='posts/',
+        upload_to='video/',
         blank=True,
         verbose_name='Картинка',
         help_text='Изображение поста',
