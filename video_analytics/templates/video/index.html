@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load cache %}
+{% block title %}
+  Видеомониторинг
+{% endblock %}
+{% block content %}
+<div class="container py-5">     
+  <h1>
+    Последние обновления на сайте Видеомониторинга
+  </h1>
+  <article>
+    {% comment %} {% include 'video/includes/switcher.html' %} {% endcomment %}
+    {% comment %} {% cache 20 index_page %} {% endcomment %}
+    {% comment %} {{ page_obj.object_list }} {% endcomment %}
+    {% for video in page_obj.object_list %}
+      <ul>
+        {% comment %} <li>
+          Автор: {{ video.author.username }}
+           <a href="{% url 'posts:profile' post.author.username %}"> 
+            все посты пользователя {{ author.username }}
+          </a>
+        </li> {% endcomment %}
+        {% comment %} <li>
+          Дата публикации: {{ video.pub_date|date:"d E Y" }}
+        </li> {% endcomment %}
+          {% comment %} <video>
+            <source class="card-img my-2" src="{{ video.video.url }}">
+          </video> {% endcomment %}
+          <div class="main-posts">
+            <div class="container">
+              <div class="row">
+                <div class="blog-masonry masonry-true">
+                  {% comment %} {% for video in video_list %} {% endcomment %}
+                    <div class="post-masonry col-md-4 col-sm-6">
+                      <div class="post-hover text-center">
+                        <div class="inside">
+                          <i class="fa fa-plus"></i>
+                          <span class="date">{{ video.pub_date|date:"d E Y" }}</span>
+                          <h4><a href="{% url 'video:video' video.id %}">{{ video.name }}</a></h4>
+                          {% comment %} <p>{{ video.description|slice:":100" }}</p> {% endcomment %}
+                        </div>
+                      </div>
+                      <div class="post-thumb">
+                        {% comment %} <img src="{{ video.image.url }}" alt=""> {% endcomment %}
+                        {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
+                        <a href="{% url 'video:video' video.id %}">
+                          <img class="card-img my-2" src="{{ im.url }}">
+                        </a>
+                        {% endthumbnail %}
+                        <div class="post-hover text-center">
+                          <div class="inside">
+                            <i class="fa fa-plus"></i>
+                            <p>{{ video.description|slice:":100" }}</p>
+                          </div>
+                        </div>
+                        <p>{{ video.text }}</p>
+                        
+                      </div>
+                    </div> <!-- /.post-masonry -->
+                  {% comment %} {% endfor %} {% endcomment %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% comment %} <video src="{{ video.video.url }}" class="object-fit-fill" autoplay></video> {% endcomment %}
+        <ul>
+          <li>
+          Автор: {{ video.author.username }}
+          </li>
+          <li>
+          Подробная информация о видео
+          </li>
+          <li>
+            Статус: {{ video.status }}
+            </li>
+        </ul>
+        {% comment %} <li>
+          Файл: {{ video.status }}
+        </li>
+        <li>
+          Файл: {{ video.image }}
+        </li>
+        <li>
+          Файл: {{ video.group }}
+        </li>
+        <li>
+          Файл: {{ video.description }}
+        </li> {% endcomment %}
+      </ul>
+      <hr>
+      {% comment %} <p><a href="{% url 'posts:post_detail' post.id %}"> {% endcomment %}
+        {% comment %} подробная информация {% endcomment %}
+      </a></p>
+      {% if video.group %}   
+        {% comment %} <a href="{% url 'posts:group_list' post.group.slug %}"> {% endcomment %}
+          Все записи группы - {{ video.group.name }}   
+        {% comment %} </a> {% endcomment %}
+      {% endif %}
+      {% if not forloop.last %}<hr>
+      {% endif %}
+    {% endfor %}
+    {% include 'video/includes/paginator.html' %}
+    {% comment %} {% endcache %} {% endcomment %}
+  </article>
+</div
+{% endblock %} 
