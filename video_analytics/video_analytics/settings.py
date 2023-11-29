@@ -1,28 +1,32 @@
 from pathlib import Path
 import os
+import tempfile
 
+from django.conf import settings
 from dotenv import load_dotenv
 
 load_dotenv()
 
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='django_video')
 
 # ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', default='*').split(', ')
-ALLOWED_HOSTS = ('*',)
+ALLOWED_HOSTS = ('*', '127.0.0.1')
 
 # DEBUG = os.getenv('DEBUG') == 'True'
 DEBUG = 'True'
 
 INSTALLED_APPS = [
+    'video.apps.VideoConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'video',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
@@ -37,10 +41,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'video_analytics.urls'
 
+# TEMPLATES_DIR = BASE_DIR / 'templates'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -48,6 +54,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'core.context_processors.year.year',
             ],
         },
     },
@@ -97,17 +104,25 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_DIRS = [
+#     os.path.join(BASE_DIR, 'media')
+# ]
+# TEMP_MEDIA_ROOT = tempfile.mkdtemp(dir=settings.BASE_DIR)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.bobsik.ru/', 'http://*.bobsik.ru/']
+CSRF_TRUSTED_ORIGINS = ['https://*.bobsik.ru/', 'http://*.bobsik.ru/', 'http://127.0.0.1*']
 
 # Max value settings for core models
 MAX_CHARFIELD_LENGTH = 200
@@ -124,3 +139,7 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+VIDEO_PER_PAGE = 10
+
+THUMBNAIL_DEBUG = True
