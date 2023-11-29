@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="main-posts">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-sm-6">
+          {% comment %} <img class="single-video" src="{{ video.image.url }}" alt=""> {% endcomment %}
+        </div>
+        <div class="col-md-6 col-sm-6">
+          <span class="date">{{ video.pub_date }}</span>
+          <h4><a href="{% url 'video:stream' video.id %}">{{ video.name }}</a></h4>
+          <p>{{ video.description }}</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          <video
+              id="my-video"
+              class="video-js"
+              controls
+              preload="auto"
+              width="1000"
+              height="800"
+              data-setup="{}"
+          >
+            <source src="{% url 'video:stream' video.id %}" type="video/mp4"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/webm"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/MOV"/>
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
