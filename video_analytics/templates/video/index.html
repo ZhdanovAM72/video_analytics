@@ -2,107 +2,65 @@
 {% load static %}
 {% load thumbnail %}
 {% load cache %}
+
 {% block title %}
   Видеомониторинг
 {% endblock %}
+
 {% block content %}
 <div class="container py-5">     
-  <h1>
+  <h1 class="text-start">
     Последние обновления на сайте Видеомониторинга
   </h1>
   <article>
-    {% comment %} {% include 'video/includes/switcher.html' %} {% endcomment %}
+    {% include 'video/includes/switcher.html' %}
     {% comment %} {% cache 20 index_page %} {% endcomment %}
-    {% comment %} {{ page_obj.object_list }} {% endcomment %}
-    {% for video in page_obj.object_list %}
-      <ul>
-        {% comment %} <li>
-          Автор: {{ video.author.username }}
-           <a href="{% url 'posts:profile' post.author.username %}"> 
-            все посты пользователя {{ author.username }}
-          </a>
-        </li> {% endcomment %}
-        {% comment %} <li>
-          Дата публикации: {{ video.pub_date|date:"d E Y" }}
-        </li> {% endcomment %}
-          {% comment %} <video>
-            <source class="card-img my-2" src="{{ video.video.url }}">
-          </video> {% endcomment %}
-          <div class="main-posts">
-            <div class="container">
-              <div class="row">
-                <div class="blog-masonry masonry-true">
-                  {% comment %} {% for video in video_list %} {% endcomment %}
-                    <div class="post-masonry col-md-4 col-sm-6">
-                      <div class="post-hover text-center">
-                        <div class="inside">
-                          <i class="fa fa-plus"></i>
-                          <span class="date">{{ video.pub_date|date:"d E Y" }}</span>
-                          <h4><a href="{% url 'video:video' video.id %}">{{ video.name }}</a></h4>
-                          {% comment %} <p>{{ video.description|slice:":100" }}</p> {% endcomment %}
-                        </div>
-                      </div>
-                      <div class="post-thumb">
-                        {% comment %} <img src="{{ video.image.url }}" alt=""> {% endcomment %}
-                        {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
-                        <a href="{% url 'video:video' video.id %}">
-                          <img class="card-img my-2" src="{{ im.url }}">
-                        </a>
-                        {% endthumbnail %}
-                        <div class="post-hover text-center">
-                          <div class="inside">
-                            <i class="fa fa-plus"></i>
-                            <p>{{ video.description|slice:":100" }}</p>
-                          </div>
-                        </div>
-                        <p>{{ video.text }}</p>
-                        
-                      </div>
-                    </div> <!-- /.post-masonry -->
-                  {% comment %} {% endfor %} {% endcomment %}
+    <section>
+      <aside class="col-md-12 col-md-10">
+        <div class="row">
+          {% for video in page_obj.object_list %}
+            <div class="col-md-4 mb-4">
+              <div class="card" class="card mb-3" style="width: 18rem;">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ video.name }}</h5>
+                <span class="date">{{ video.pub_date|date:"d E Y" }}</span>
+              <div class="post-masonry">
+                <div class="post-thumb">
+                  {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
+                    <a href="{% url 'video:video' video.id %}">
+                      <img class="card-img my-2" src="{{ im.url }}">
+                    </a>
+                  {% endthumbnail %}
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                  <div class="post-hover text-center">
+                    <div class="inside">
+                      <i class="fa fa-plus"></i>
+                      <p>{{ video.description|slice:":30" }}</p>
+                      <nav class="navbar bg-body-tertiary">
+                        <form class="container-fluid justify-content-start">
+                          <a href="{% url 'video:video' video.id %}">
+                            <button class="btn btn-outline-primary me-2" type="button">Просмотр видео</button>
+                          </a>
+                        </form>
+                      </nav>
+                    </div>
+                  </div>
+                  <p>{{ video.text }}</p>
+                </h6>
                 </div>
               </div>
+              </div>
             </div>
-          </div>
-          {% comment %} <video src="{{ video.video.url }}" class="object-fit-fill" autoplay></video> {% endcomment %}
-        <ul>
-          <li>
-          Автор: {{ video.author.username }}
-          </li>
-          <li>
-          Подробная информация о видео
-          </li>
-          <li>
-            Статус: {{ video.status }}
-            </li>
-        </ul>
-        {% comment %} <li>
-          Файл: {{ video.status }}
-        </li>
-        <li>
-          Файл: {{ video.image }}
-        </li>
-        <li>
-          Файл: {{ video.group }}
-        </li>
-        <li>
-          Файл: {{ video.description }}
-        </li> {% endcomment %}
-      </ul>
-      <hr>
-      {% comment %} <p><a href="{% url 'posts:post_detail' post.id %}"> {% endcomment %}
-        {% comment %} подробная информация {% endcomment %}
-      </a></p>
-      {% if video.group %}   
-        {% comment %} <a href="{% url 'posts:group_list' post.group.slug %}"> {% endcomment %}
-          Все записи группы - {{ video.group.name }}   
-        {% comment %} </a> {% endcomment %}
-      {% endif %}
-      {% if not forloop.last %}<hr>
-      {% endif %}
-    {% endfor %}
+            </div>
+          {% endfor %}
+        </div>
+      </aside>
+    </section>
+    {% if not forloop.last %}
+      <hr class="border border-primary border-3 opacity-75">
+    {% endif %}
     {% include 'video/includes/paginator.html' %}
     {% comment %} {% endcache %} {% endcomment %}
   </article>
-</div
-{% endblock %} 
+</div>
+{% endblock %}
