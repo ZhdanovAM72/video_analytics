@@ -3,6 +3,7 @@ import os
 import tempfile
 
 from django.conf import settings
+from django.urls import reverse_lazy
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,6 +21,9 @@ DEBUG = 'True'
 
 INSTALLED_APPS = [
     'video.apps.VideoConfig',
+    'users.apps.UsersConfig',
+    'core.apps.CoreConfig',
+    'about.apps.AboutConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -54,7 +58,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'core.context_processors.year.year',
+                'core.context_processors.year.year',
             ],
         },
     },
@@ -123,6 +127,13 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/api/.*$'
 
 CSRF_TRUSTED_ORIGINS = ['https://*.bobsik.ru/', 'http://*.bobsik.ru/', 'http://127.0.0.1*']
+
+LOGIN_URL = 'users:login'
+LOGIN_REDIRECT_URL = 'video:index'
+# LOGOUT_REDIRECT_URL = 'users:logout'
+LOGOUT_URL = reverse_lazy('logout')
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
 
 # Max value settings for core models
 MAX_CHARFIELD_LENGTH = 200
