@@ -1,16 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
+{% comment %} {% block content %}
   <div class="main-posts">
     <div class="container">
       <div class="row">
-        <div class="col-md-6 col-sm-6">
-          {% comment %} <img class="single-video" src="{{ video.image.url }}" alt=""> {% endcomment %}
-        </div>
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-12 col-sm-4">
           <span class="date">{{ video.pub_date }}</span>
-          <h4><a href="{% url 'video:stream' video.id %}">{{ video.name }}</a></h4>
+          <h4>{{ video.name }}: {{ video.description }}</h4>
           <p>{{ video.description }}</p>
         </div>
       </div>
@@ -23,6 +20,36 @@
               preload="auto"
               width="1000"
               height="800"
+              data-setup="{}"
+          >
+            <source src="{% url 'video:stream' video.id %}" type="video/mp4"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/webm"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/MOV"/>
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %} {% endcomment %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="main-posts">
+          <span class="date">{{ video.pub_date }}</span>
+          <h4>{{ video.name }}: <h6>{{ video.description }}</h6></h4>
+        </div>
+      </div>
+      <div class="col-md-8 row-cols-1">
+        <div class="video-section">
+          <video
+              id="my-video"
+              class="video-js"
+              controls
+              preload="auto"
+              width="100%"
+              height="auto"
               data-setup="{}"
           >
             <source src="{% url 'video:stream' video.id %}" type="video/mp4"/>
