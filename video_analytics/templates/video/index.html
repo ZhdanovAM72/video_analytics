@@ -15,47 +15,43 @@
   <article>
     {% include 'video/includes/switcher.html' %}
     {% comment %} {% cache 20 index_page %} {% endcomment %}
-    <section>
-      <aside class="col-md-12 col-md-10">
-        <div class="row">
+      <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           {% for video in page_obj.object_list %}
-            <div class="col-md-4 mb-4">
-              <div class="card" class="card mb-3" style="width: 18rem;">
-              <div class="card-body text-center">
-                <h5 class="card-title">{{ video.name }}</h5>
-                <span class="date">{{ video.pub_date|date:"d E Y" }}</span>
-              <div class="post-masonry">
-                <div class="post-thumb">
-                  {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
+          <div class="col">
+            <div class="card shadow-sm">
+              {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
+              <a href="{% url 'video:video' video.id %}">
+                <img class="card-img my-2" src="{{ im.url }}">
+              </a>
+              {% endthumbnail %}
+              <div class="card-body">
+                <div class="card-title">
+                  {% if video.status.color == '#FF9900' %}
+                  <small class="btn btn-warning"> {{video.status.name}}</small>
+                  {% else %}
+                  <small class="btn btn-success"> {{video.status.name}}</small>
+                  {% endif%}
+                </div>
+                <p class="card-text"><h6 class="card-subtitle mb-2 text-body-secondary">
+                  {{ video.group }}
+                </h6>{{ video.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
                     <a href="{% url 'video:video' video.id %}">
-                      <img class="card-img my-2" src="{{ im.url }}">
+                      <button type="button" class="btn btn-sm btn-outline-primary">Видео</button>
                     </a>
-                  {% endthumbnail %}
-                <h6 class="card-subtitle mb-2 text-body-secondary">
-                  <div class="post-hover text-center">
-                    <div class="inside">
-                      <i class="fa fa-plus"></i>
-                      <p>{{ video.description|slice:":30" }}</p>
-                      <nav class="navbar bg-body-tertiary">
-                        <form class="container-fluid justify-content-start">
-                          <a href="{% url 'video:video' video.id %}">
-                            <button class="btn btn-outline-primary me-2" type="button">Просмотр видео</button>
-                          </a>
-                        </form>
-                      </nav>
-                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Акт</button>
                   </div>
-                  <p>{{ video.text }}</p>
-                </h6>
+                  <small class="text-body-secondary"> {{ video.pub_date|date:"d.m.Y" }}г.</small>
                 </div>
               </div>
-              </div>
             </div>
-            </div>
+          </div>
           {% endfor %}
         </div>
-      </aside>
-    </section>
+      </div>
     {% if not forloop.last %}
       <hr class="border border-primary border-3 opacity-75">
     {% endif %}
