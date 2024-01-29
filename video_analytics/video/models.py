@@ -56,7 +56,7 @@ class Status(models.Model):
 
 
 class Group(models.Model):
-    """"""
+    """Модель для описания групп."""
     name = models.CharField(
         max_length=50,
         verbose_name='Название группы',
@@ -83,7 +83,7 @@ class Group(models.Model):
 
 
 class Video(models.Model):
-    """"""
+    """Модель видеозаписей."""
     name = models.CharField(
         max_length=50,
         null=False,
