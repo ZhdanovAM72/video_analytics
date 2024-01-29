@@ -162,3 +162,11 @@ cython_debug/
 # Media files
 media/
 static/
+
+# Develop files
+create_post.html
+follow.html
+group_list.html
+post_detail.html
+profile.html
+comments.html
