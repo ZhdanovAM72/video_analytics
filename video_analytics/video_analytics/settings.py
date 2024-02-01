@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'core.apps.CoreConfig',
     'about.apps.AboutConfig',
+    'check_list.apps.CheckListConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
