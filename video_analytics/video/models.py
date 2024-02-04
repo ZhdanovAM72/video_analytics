@@ -141,6 +141,7 @@ class Video(models.Model):
     )
 
     class Meta:
+        ordering = ('-pub_date',)
         verbose_name = 'Видеозапись'
         verbose_name_plural = 'Видеозаписи'
 
