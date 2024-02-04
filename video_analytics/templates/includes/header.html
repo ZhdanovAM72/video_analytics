@@ -76,7 +76,7 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           {% comment %} <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> {% endcomment %}
           {% if user.is_authenticated %}
-          <li><a href="{% url 'video:index' %}" class="nav-link px-2 text-white">Добавить видео</a></li>
+          <li><a href="{% url 'video:create_video' %}" class="nav-link px-2 text-white">Добавить видео</a></li>
           <li><a href="{% url 'video:index' %}" class="nav-link px-2 text-white">Инструкция</a></li>
           {% endif %}
           <li><a href="{% url 'about:tech' %}" class="nav-link px-2 text-white">Технологии</a></li>

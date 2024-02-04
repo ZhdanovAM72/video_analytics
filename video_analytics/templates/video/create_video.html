@@ -36,21 +36,59 @@
                 </div>
               {% endfor %}
           {% endif %}
+          
           <form method="post" enctype="multipart/form-data">{% csrf_token %}           
             <div class="form-group row my-3 p-3">
-              <label for="form.text.label">{{ form.text.label }}
+              <label for="form.name.label">{{ form.name.label }}
               <span class="required text-danger">*</span>                  
               </label>
-              {{ form.text }}
+              {{ form.name }}
               <small id="id_text-help" class="form-text text-muted">
-                {{ form.text.help_text }}
+                {{ form.name.help_text }}
               </small>
             </div>
             <div class="form-group row my-3 p-3">
               <label for="id_group">
+                {{ form.author.label }}
+              </label>
+              <select name="author" class="form-control" id="group.id">
+                {% for author in form.author %}
+                  {{ author }}
+                {% endfor %}
+              </select>
+              <small id="id_group-help" class="form-text text-muted">
+                {{ form.author.help_text }}
+              </small>
+            </div>
+
+            <div class="form-group row my-3 p-3">
+              <label for="form.description.label">{{ form.description.label }}
+              <span class="required text-danger">*</span>                  
+              </label>
+              {{ form.description }}
+              <small id="id_text-help" class="form-text text-muted">
+                {{ form.description.help_text }}
+              </small>
+            </div>
+
+            <div class="form-group row my-3 p-3">
+              <label for="id_group">
+                {{ form.status.label }}
+              </label>
+              <select name="status" class="form-control" id="group.id">
+                {% for status in form.status %}
+                  {{ status }}
+                {% endfor %}
+              </select>
+              <small id="id_group-help" class="form-text text-muted">
+                {{ form.status.help_text }}
+              </small>
+            </div>
+
+            <div class="form-group row my-3 p-3">
+              <label for="id_group">
                 {{ form.group.label }}
               </label>
-            <div class="form-group row my-3 p-3">
               <select name="group" class="form-control" id="group.id">
                 {% for group in form.group %}
                   {{ group }}
@@ -69,7 +107,17 @@
                 {{ form.image.help_text }}
               </small>                  
             </div>
+            <div class="form-image row my-3 p-3">
+              <label for="form.video.label" class="form-label">{{ form.video.label }}</label>
+              <label>
+                {{ form.video }}
+              </label>
+              <small id="id_text-help" class="form-text text-muted">
+                {{ form.video.help_text }}
+              </small>                  
+            </div>
             <div class="d-flex justify-content-end">
+
               <button type="submit" class="btn btn-primary">
                 {% if is_edit %}
                   Сохранить
