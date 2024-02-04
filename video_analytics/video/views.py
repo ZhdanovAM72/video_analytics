@@ -6,10 +6,20 @@ from django.shortcuts import render, get_object_or_404
 
 from video.services import open_file
 from video.models import Video
+from check_list.models import PersonnelActionsValue
+from check_list.forms import CheckListForm
 from video_analytics.settings import VIDEO_PER_PAGE
+from django.shortcuts import render, get_object_or_404
+from check_list.forms import CheckListForm
+import logging
+from django.shortcuts import get_object_or_404
+from check_list.models import PersonnelActions
+
+logging.basicConfig(
+    level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s'
+)
 
 
-# Create your views here.
 def index(request):
     post_list = Video.objects.all()
     paginator = Paginator(post_list, VIDEO_PER_PAGE)
@@ -22,20 +32,65 @@ def index(request):
 
 
 def get_list_video(request):
-    return render(request, 'video/index.html', {'video_list': Video.objects.all()})
-
-
-def get_video(request, pk: int):
-    _video = get_object_or_404(Video, id=pk)
-    return render(request, "video/video.html", {"video": _video})
+    return render(
+        request, 'video/index.html', {'video_list': Video.objects.all()}
+    )
 
 
 def get_streaming_video(request, pk: int):
     file, status_code, content_length, content_range = open_file(request, pk)
-    response = StreamingHttpResponse(file, status=status_code, content_type='video/mp4')
+    response = StreamingHttpResponse(
+        file, status=status_code, content_type='video/mp4'
+    )
 
     response['Accept-Ranges'] = 'bytes'
     response['Content-Length'] = str(content_length)
     response['Cache-Control'] = 'no-cache'
     response['Content-Range'] = content_range
     return response
+
+
+def get_video(request, pk):
+    video = get_object_or_404(Video, pk=pk)
+    if request.method == 'POST':
+        form = CheckListForm(request.POST)
+        if form.is_valid():
+            check_list_instance = form.save(commit=False)
+            check_list_instance.save()
+
+            formset = form.formset
+            for i, formset_form in enumerate(formset.forms):
+                value = request.POST.get(
+                    f'personnelactionsvalue_set-{i}-value'
+                )
+                logging.info(f'{value}')
+                logging.info(f'{value}')
+
+                description = request.POST.get(
+                    f'personnelactionsvalue_set-{i}-description'
+                )
+                logging.info(f'{description}')
+
+                personnel_action_id = request.POST.get(
+                    f'personnelactionsvalue_set-{i}-personnel_action'
+                )
+                logging.info(f'{personnel_action_id}')
+
+                personnel_action_instance = get_object_or_404(
+                    PersonnelActions,
+                    id=personnel_action_id
+                )
+
+                PersonnelActionsValue.objects.create(
+                    value=value,
+                    description=description,
+                    check_list_id=check_list_instance,
+                    personnel_action=personnel_action_instance,
+                )
+            # logging.info(f'{formset_form.value[1]}')
+
+        return index(request)
+    else:
+        form = CheckListForm()
+
+    return render(request, 'video/video.html', {'form': form, 'video': video})
