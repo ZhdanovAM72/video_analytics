@@ -3,9 +3,11 @@ from django.core.paginator import Paginator
 
 from django.http import StreamingHttpResponse
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from video.services import open_file
 from video.models import Video
+from video.forms import VideoForm
 from check_list.models import PersonnelActionsValue
 from check_list.forms import CheckListForm
 from video_analytics.settings import VIDEO_PER_PAGE
@@ -35,6 +37,17 @@ def get_list_video(request):
     return render(
         request, 'video/index.html', {'video_list': Video.objects.all()}
     )
+
+@login_required
+def create_video(request):
+    form = VideoForm(request.POST, request.FILES or None)
+    if request.method != 'POST':
+        form = VideoForm()
+    if form.is_valid():
+        video = form.save(commit=False)
+        video.save()
+        return index(request)
+    return render(request, 'video/create_video.html', {'form': form})
 
 
 def get_streaming_video(request, pk: int):
