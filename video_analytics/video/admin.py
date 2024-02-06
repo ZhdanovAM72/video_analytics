@@ -9,14 +9,16 @@ from check_list.models import CheckList
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     fields = ('name', 'slug', 'description')
-    # list_display = ('__all__',)
+    list_display = ('id', 'name', 'description')
+    list_filter = ('name',)
+    search_fields = ('name',)
     empty_value_display = '-данные отсутствуют-'
 
 
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
     fields = ('name', 'color', 'slug',)
-    # list_display = ('__all__',)
+    list_display = ('id', 'name', 'color')
     empty_value_display = '-данные отсутствуют-'
 
 
@@ -28,7 +30,8 @@ class CheckListInline(admin.StackedInline):
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
     inlines = [CheckListInline]
-    list_display = ('name', 'author', 'pub_date', 'description', 'status', 'video', 'get_html_image', 'group')
+    list_display = ('name', 'author', 'pub_date', 'description',
+                    'status', 'video', 'get_html_image', 'group')
     empty_value_display = '-данные отсутствуют-'
 
     def get_html_image(self, obj):
