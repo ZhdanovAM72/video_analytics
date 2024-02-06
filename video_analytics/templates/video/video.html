@@ -4,9 +4,12 @@
 {% block content %}
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-4">
+      <div class="col-md-8">
         <div class="main-posts">
-          <h4>{{ video.name }}: <h6>{{ video.description }}<span class="date">{{ video.pub_date }}</span></h6></h4>
+          <h3>
+            {{ video.name }}
+            <small class="text-muted">{{ video.description }}  <span class="date">{{ video.pub_date }}</span></small>
+          </h3>
         </div> 
       </div> 
     </div>
@@ -54,20 +57,61 @@
           {% endfor %}
         {% endif %}
 
+        {% if video.checklist %}
+
+        {% for check in video.checklist %}
+        <div class="form-group row my-3 p-3">
+        <p><h3>{{check.name }}</h3></p>
+        <p><small class="text-muted">Подразделение:</small> {{check.structural_subdivision }}</p>
+        <p><small class="text-muted">Проверяющий:</small> {{check.inspector }}</p>
+        {% for actions in check.actions%}
+        <table class="table table-sm">
+          <caption>Замечания из чек-листа:</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Описание замечания</th>
+              <th scope="col">Оценка</th>
+              <th scope="col">Описание</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            {% for actions in check.actions%}
+              <tr>
+                <td scope="row">{{ actions.id }}</td>
+                <td scope="row">{{actions.personnel_action }}</td>
+                <td scope="row">{{actions.value }}</td>
+                <td scope="row">{{ check_list.video }}</td>
+                <td scope="row">{{actions.description }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endfor %}
+        </div>
+        {% endfor %}
+
+        {% else %}
+
         <form method="post" enctype="multipart/form-data" action="{% url 'video:video' pk=video.id %}">
           {% csrf_token %}
 
-
           <div class="form-group row my-3 p-3">
             <h3>Чек-лист:</h3>
-            <label for="form.text.label">{{ form.video.label }}
+           <label for="form.text.label">{{ form.video.label }}
               <span class="required text-danger">*</span>                  
             </label>
             {{ form.video }}
+            <input type="hidden" name="{{ form.video.name }}" value="{{ form.video.value }}">
             <small id="id_text-help" class="form-text text-muted">
-              {{ form.name.video }}
+              заполняется автоматически
             </small>
           </div>
+           <script>
+            document.getElementById("id_video").disabled = true;
+          </script> 
+            
 
 
           <div class="form-group row my-3 p-3">
@@ -208,9 +252,7 @@
 
           <div class="form-image row my-3 p-3">
             <label for="form.image.label" class="form-label">{{ form.brif_conclusion.label }}</label>
-            <label>
               {{ form.brif_conclusion }}
-            </label>
             <small id="id_text-help" class="form-text text-muted">
               {{ form.brif_conclusion.help_text }}
             </small>                    
@@ -218,20 +260,22 @@
 
           <div class="form-image row my-3 p-3">
             <label for="form.image.label" class="form-label">{{ form.offer.label }}</label>
-            <label>
               {{ form.offer }}
-            </label>
             <small id="id_text-help" class="form-text text-muted">
               {{ form.offer.help_text }}
             </small>                    
           
+            <div class="form-image row my-3 p-3">
+            </div>
           <button type="submit" class="btn btn-primary">
+            
             {% if is_edit %}
               Сохранить
             {% else %} 
-              Сохранить акт
+              Сохранить чек-лист
             {% endif %} 
           </button>
+          {% endif %}
         </div>
         <div class="d-flex justify-content-end"></div>
         </form>
