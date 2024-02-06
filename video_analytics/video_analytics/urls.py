@@ -25,6 +25,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('about/', include('about.urls', namespace='about')),
     path('', include('video.urls', namespace='videos')),
+    path('', include('check_list.urls', namespace='check_list')),
 ]
 
 handler403 = 'core.views.permission_denied'
