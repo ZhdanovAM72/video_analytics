@@ -33,10 +33,38 @@ def index(request):
     return render(request, 'video/index.html', context)
 
 
+def new_index(request):
+    post_list = Video.objects.filter(status__name='Новое')
+    paginator = Paginator(post_list, VIDEO_PER_PAGE)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    for video in page_obj.object_list:
+        video.status_name = video.status.name
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'video/new_index.html', context)
+
+
+def done_index(request):
+    post_list = Video.objects.filter(status__name='Просмотрено')
+    logging.info(f'{post_list}')
+    paginator = Paginator(post_list, VIDEO_PER_PAGE)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    for video in page_obj.object_list:
+        video.status_name = video.status.name
+    context = {
+        'page_obj': page_obj,
+    }
+    return render(request, 'video/done_index.html', context)
+
+
 def get_list_video(request):
     return render(
         request, 'video/index.html', {'video_list': Video.objects.all()}
     )
+
 
 @login_required
 def create_video(request):
@@ -65,9 +93,17 @@ def get_streaming_video(request, pk: int):
 
 def get_video(request, pk):
     video = get_object_or_404(Video, pk=pk)
+    video.checklist = video.check_lists.all()
+    for checklists in video.checklist:
+        checklists.actions = checklists.personnelactionsvalue_set.all()
+    # logging.info(f'{video.checklist}')
+    # logging.info(f'{checklists.actions}')
     if request.method == 'POST':
+        # form = CheckListForm(request.POST, initial={'video': video})
         form = CheckListForm(request.POST)
+        form.video = video
         if form.is_valid():
+            logging.info('>>>>>>>>>>>>after valid')
             check_list_instance = form.save(commit=False)
             check_list_instance.save()
 
@@ -104,6 +140,7 @@ def get_video(request, pk):
 
         return index(request)
     else:
-        form = CheckListForm()
+        logging.info('>>>>>>>>>>>>else')
+        form = CheckListForm(initial={'video': video})
 
     return render(request, 'video/video.html', {'form': form, 'video': video})

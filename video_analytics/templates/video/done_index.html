@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load cache %}
+
+{% block title %}
+  Новое
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">     
+  <h1 class="text-start">
+    Новые видео
+  </h1>
+  <article>
+    {% include 'video/includes/switcher.html' %}
+    {% comment %} {% cache 20 index_page %} {% endcomment %}
+    
+      <div class="album py-5 bg-body-tertiary">
+        <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          {% for video in page_obj.object_list %}
+          {% if video.status_name == 'Просмотрено' %}
+          <div class="col">
+            <div class="card shadow-sm">
+              {% thumbnail video.image "660x339" crop="center" upscale=True as im %}
+              <a href="{% url 'video:video' video.id %}">
+                <img class="card-img my-2" src="{{ im.url }}">
+              </a>
+              {% endthumbnail %}
+              <div class="card-body">
+                <div class="card-title">
+                  {% if video.status.color == '#FF9900' %}
+                  <small class="btn btn-warning"> {{video.status.name}}</small>
+                  {% else %}
+                  <small class="btn btn-success"> {{video.status.name}}</small>
+                  {% endif%}
+                </div>
+                <p class="card-text"><h6 class="card-subtitle mb-2 text-body-secondary">
+                  {{ video.group }}
+                </h6>{{ video.description }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a href="{% url 'video:video' video.id %}">
+                      <button type="button" class="btn btn-sm btn-outline-primary">Видео</button>
+                    </a>
+                    <a href="{% url 'video:video' video.id %}">
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Акт</button>
+                    </a>
+                  </div>
+                  <small class="text-body-secondary"> {{ video.pub_date|date:"d.m.Y" }}г.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          Новых видео нет
+          {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+   
+    {% comment %} {% if not forloop.last %}
+      <hr class="border border-primary border-3 opacity-75">
+    {% endif %} {% endcomment %}
+    {% include 'video/includes/paginator.html' %}
+    {% comment %} {% endcache %} {% endcomment %}
+  </article>
+</div>
+{% endblock %}
