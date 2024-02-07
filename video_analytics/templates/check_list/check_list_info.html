@@ -27,7 +27,7 @@
                 <th scope="col">Краткий вывод</th>
               </tr>
             </thead>
-            
+
             <tbody>
               {% for check_list in page_obj.object_list %}
                 <tr>
@@ -37,16 +37,15 @@
                   <td scope="row"><a href="{% url 'video:video' pk=check_list.video.id %}">{{ check_list.video }}</a></td>
                   <td scope="row">{{ check_list.inspector.last_name }}</td>
                   {% if check_list.personnel_actions_value == 0 %}
-                  <td class="align-middle" >-</td>
+                    <td class="align-middle" >-</td>
                   {% else %}
-                  <td scope="row">{{ check_list.personnel_actions_value }}</td>
+                    <th scope="row">{{ check_list.personnel_actions_value }}</th>
                   {% endif %}
-                  <td class="align-middle" >{{ check_list.brif_conclusion }}</td>
+                    <td class="align-middle" >{{ check_list.brif_conclusion }}</td>
                 </tr>
               {% endfor %}
             </tbody>
           </table>
-        
       </div>
     {% include 'video/includes/paginator.html' %}
   </article>
