@@ -14,7 +14,7 @@
   </h1>
   <article>
     {% include 'video/includes/switcher.html' %}
-    {% comment %} {% cache 20 index_page %} {% endcomment %}
+    {% cache 20 index_page %}
       <div class="album py-5 bg-body-tertiary">
         <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -58,7 +58,7 @@
       <hr class="border border-primary border-3 opacity-75">
     {% endif %} {% endcomment %}
     {% include 'video/includes/paginator.html' %}
-    {% comment %} {% endcache %} {% endcomment %}
+    {% endcache %}
   </article>
 </div>
 {% endblock %}
