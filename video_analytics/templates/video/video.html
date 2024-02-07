@@ -61,12 +61,12 @@
 
         {% for check in video.checklist %}
         <div class="form-group row my-3 p-3">
-        <p><h3>{{check.name }}</h3></p>
+        <p><h3><small class="text-muted">Чек-лист:</small> {{check.name }}</h3></p>
         <p><small class="text-muted">Подразделение:</small> {{check.structural_subdivision }}</p>
         <p><small class="text-muted">Проверяющий:</small> {{check.inspector }}</p>
-        {% for actions in check.actions%}
+        {% comment %} {% for actions in check.actions%} {% endcomment %}
         <table class="table table-sm">
-          <caption>Замечания из чек-листа:</caption>
+          <p><small class="text-muted">Замечания из чек-листа:</small></p>
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -88,7 +88,7 @@
             {% endfor %}
           </tbody>
         </table>
-        {% endfor %}
+        {% comment %} {% endfor %} {% endcomment %}
         </div>
         {% endfor %}
 

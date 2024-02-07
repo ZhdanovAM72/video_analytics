@@ -10,7 +10,7 @@
 {% block content %}
 <div class="container py-5">     
   <h1 class="text-start">
-    Последние обновления на сайте Видеомониторинга
+    Все видео
   </h1>
   <article>
     {% include 'video/includes/switcher.html' %}
@@ -43,7 +43,7 @@
                       <button type="button" class="btn btn-sm btn-outline-primary">Видео</button>
                     </a>
                     <a href="{% url 'video:video' video.id %}">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Акт</button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary">Чек-лист</button>
                     </a>
                   </div>
                   <small class="text-body-secondary"> {{ video.pub_date|date:"d.m.Y" }}г.</small>
