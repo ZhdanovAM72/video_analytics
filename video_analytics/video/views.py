@@ -96,14 +96,11 @@ def get_video(request, pk):
     video.checklist = video.check_lists.all()
     for checklists in video.checklist:
         checklists.actions = checklists.personnelactionsvalue_set.all()
-    # logging.info(f'{video.checklist}')
-    # logging.info(f'{checklists.actions}')
     if request.method == 'POST':
-        # form = CheckListForm(request.POST, initial={'video': video})
         form = CheckListForm(request.POST)
         form.video = video
         if form.is_valid():
-            logging.info('>>>>>>>>>>>>after valid')
+            # logging.info('>>>>>>>>>>>>after valid')
             check_list_instance = form.save(commit=False)
             check_list_instance.save()
 
@@ -136,11 +133,10 @@ def get_video(request, pk):
                     check_list_id=check_list_instance,
                     personnel_action=personnel_action_instance,
                 )
-            # logging.info(f'{formset_form.value[1]}')
 
         return index(request)
     else:
-        logging.info('>>>>>>>>>>>>else')
+        # logging.info('>>>>>>>>>>>>else')
         form = CheckListForm(initial={'video': video})
 
     return render(request, 'video/video.html', {'form': form, 'video': video})
