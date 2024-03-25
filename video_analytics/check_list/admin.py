@@ -3,6 +3,7 @@ from check_list.models import (
     CheckList, PersonnelActions, PersonnelActionsValue
 )
 
+
 @admin.register(PersonnelActions)
 class PersonnelActionsAdmin(admin.ModelAdmin):
     list_display = ('id', 'number', 'personnel_action_description')
