@@ -1,0 +1,111 @@
+{% load static %}
+{% comment %} <nav class="navbar navbar-dark" style="background-color: RoyalBlue">
+  <div class="container">
+    <a class="navbar-brand" href="{% url 'video:index' %}">
+      <img src="{% static 'img/logo.png' %}" width="30" height="30"
+        class="d-inline-block align-top" alt="">
+      <span style="color:lightblue">Energysystems ↯ </span>
+    </a>
+    <ul class="nav nav-pills">
+      <li class="nav-item"> 
+        <a class="nav-link link-light
+          {% if request.resolver_match.view_name  == 'video:index' %}
+           active
+          {% endif %} "
+          href="{% url 'about:author' %}"
+        >
+          Контакты
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-light
+          {% if request.resolver_match.view_name  == 'about:tech' %}
+           active
+          {% endif %}"
+          href="{% url 'about:tech' %}"
+        >
+          Технологии
+        </a>
+      </li>
+      {% if user.is_authenticated %}
+        <li class="nav-item"> 
+          <a class="nav-link link-light" href="{% url 'video:index' %}" style="color:white">
+            Новая запись
+          </a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link link-light" 
+            href="{% url 'users:password_reset' %}"
+          >
+            Изменить пароль
+          </a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link link-light" href="{% url 'users:logout' %}" style="color:white">
+            Выйти
+          </a>
+        </li>
+        <li class="nav-link link-light">
+          Пользователь: {{ user.username }}
+        </li>
+      {% else %}
+        <li class="nav-item"> 
+          <a class="nav-link link-light" href="{% url 'users:login' %}">
+            Войти
+          </a>
+        </li>
+        <li class="nav-item"> 
+          <a class="nav-link link-light" href="{% url 'users:signup' %}">
+            Регистрация
+          </a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</nav> {% endcomment %}
+{% comment %} <header class="p-3 text-bg-dark"> {% endcomment %}
+  <header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-play-btn-fill" viewBox="0 0 16 16">
+            <path d="M0 12V4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2m6.79-6.907A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z"/>
+          </svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          {% comment %} <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li> {% endcomment %}
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'video:create_video' %}" class="nav-link px-2 text-white">Добавить видео</a></li>
+          <li><a href="{% url 'check_list:check_lists_info' %}" class="nav-link px-2 text-white">Чек-листы</a></li>
+          <li><a href="{% url 'check_list:base_stats' %}" class="nav-link px-2 text-white">Статистика</a></li>
+          {% comment %} <li><a href="{% url 'video:index' %}" class="nav-link px-2 text-white">Инструкция</a></li> {% endcomment %}
+          {% endif %}
+          {% comment %} <li><a href="{% url 'about:tech' %}" class="nav-link px-2 text-white">Технологии</a></li>
+          <li><a href="{% url 'about:author' %}" class="nav-link px-2 text-white">Автор</a></li> {% endcomment %}
+        </ul>
+
+        <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+          <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="поиск..." aria-label="Search">
+        </form>
+
+        <div class="text-end">
+          {% if user.is_authenticated %}
+          <a href="{% url 'users:password_reset' %}">
+            <button type="button" class="btn btn-outline-light me-2">Изменить пароль</button>
+          </a>
+          <a href="{% url 'users:logout' %}">
+            <button type="button" class="btn btn-warning">Выйти</button>
+          </a>
+          {% else %}
+          <a href="{% url 'users:login' %}">
+            <button type="button" class="btn btn-outline-light me-2">Войти</button>
+          </a>
+          <a href="{% url 'users:signup' %}">
+            <button type="button" class="btn btn-warning">Зарегистрироваться</button>
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </header>

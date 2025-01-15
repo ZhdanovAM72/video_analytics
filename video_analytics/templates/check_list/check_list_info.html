@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load cache %}
+
+{% block title %}
+  Сводные данные
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">     
+  <h1 class="text-start">
+    Сводные данные по чек-листам
+  </h1>
+  <article>
+      <div>
+          <table class="table table-sm">
+            <caption>список чек-листов</caption>
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">ПрЭО/ПО</th>
+                <th scope="col">Чек-лист</th>
+                <th scope="col">Видео</th>
+                <th scope="col">Проверил</th>
+                <th scope="col">Количество ошибок</th>
+                <th scope="col">Краткий вывод</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for check_list in page_obj.object_list %}
+                <tr>
+                  <td scope="row">{{ check_list.id }}</td>
+                  <td scope="row">{{ check_list.structural_subdivision }}</td>
+                  <td scope="row">{{ check_list.name }}</td>
+                  <td scope="row"><a href="{% url 'video:video' pk=check_list.video.id %}">{{ check_list.video }}</a></td>
+                  <td scope="row">{{ check_list.inspector.last_name }}</td>
+                  {% if check_list.personnel_actions_value == 0 %}
+                    <td class="align-middle" >-</td>
+                  {% else %}
+                    <th scope="row">{{ check_list.personnel_actions_value }}</th>
+                  {% endif %}
+                    <td class="align-middle" >{{ check_list.brif_conclusion }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    {% include 'video/includes/paginator.html' %}
+  </article>
+</div>
+{% endblock %}
