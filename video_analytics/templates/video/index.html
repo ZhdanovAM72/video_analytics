@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load thumbnail %}
-{% load cache %}
+{% comment %} {% load cache %} {% endcomment %}
 
 {% block title %}
   Видеомониторинг
@@ -14,7 +14,7 @@
   </h1>
   <article>
     {% include 'video/includes/switcher.html' %}
-    {% cache 20 index_page %}
+    {% comment %} {% cache 20 index_page %} {% endcomment %}
       <div class="album py-5 bg-body-tertiary">
         <div class="container">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -54,11 +54,8 @@
           {% endfor %}
         </div>
       </div>
-    {% comment %} {% if not forloop.last %}
-      <hr class="border border-primary border-3 opacity-75">
-    {% endif %} {% endcomment %}
     {% include 'video/includes/paginator.html' %}
-    {% endcache %}
+    {% comment %} {% endcache %} {% endcomment %}
   </article>
 </div>
 {% endblock %}

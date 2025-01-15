@@ -78,10 +78,11 @@
           {% if user.is_authenticated %}
           <li><a href="{% url 'video:create_video' %}" class="nav-link px-2 text-white">Добавить видео</a></li>
           <li><a href="{% url 'check_list:check_lists_info' %}" class="nav-link px-2 text-white">Чек-листы</a></li>
+          <li><a href="{% url 'check_list:base_stats' %}" class="nav-link px-2 text-white">Статистика</a></li>
           {% comment %} <li><a href="{% url 'video:index' %}" class="nav-link px-2 text-white">Инструкция</a></li> {% endcomment %}
           {% endif %}
-          <li><a href="{% url 'about:tech' %}" class="nav-link px-2 text-white">Технологии</a></li>
-          <li><a href="{% url 'about:author' %}" class="nav-link px-2 text-white">Автор</a></li>
+          {% comment %} <li><a href="{% url 'about:tech' %}" class="nav-link px-2 text-white">Технологии</a></li>
+          <li><a href="{% url 'about:author' %}" class="nav-link px-2 text-white">Автор</a></li> {% endcomment %}
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">

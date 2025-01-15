@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load thumbnail %}
+{% load cache %}
+
+{% block title %}
+Статистика по видео
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">     
+  <h1 class="text-start">
+    Статистика по видео
+  </h1>
+  <article>
+      <div>
+          <table class="table table-sm">
+            <caption>кол-во, шт.</caption>
+            <thead>
+              <tr>
+                <th scope="col">Всего видео</th>
+                <th scope="col">Просмотрено</th>
+                <th scope="col">Не просмотрено</th>
+                <th scope="col">Количество ошибок</th>
+              </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                  <td scope="row">{{ count_all }}</td>
+                  <td scope="row">{{ videos_all }}</td>
+                  <td scope="row">{{ videos_done }}</td>
+                  <th scope="row">{{ personnel_actions_value }}</th>
+                </tr>
+            </tbody>
+          </table>
+      </div>
+    {% comment %} {% include 'video/includes/paginator.html' %} {% endcomment %}
+  </article>
+</div>
+{% endblock %}

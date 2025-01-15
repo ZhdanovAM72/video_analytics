@@ -1,8 +1,8 @@
 from pathlib import Path
 import os
-import tempfile
+# import tempfile
 
-from django.conf import settings
+# from django.conf import settings
 from django.urls import reverse_lazy
 from dotenv import load_dotenv
 

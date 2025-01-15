@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load user_filters %}
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="main-posts">
+          <h3>
+            {{ video.name }}
+            <small class="text-muted">{{ video.description }}  <span class="date">{{ video.pub_date }}</span></small>
+          </h3>
+        </div> 
+      </div> 
+    </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="video-section">
+          <video
+              id="my-video"
+              class="video-js"
+              controls
+              preload="auto"
+              width="100%"
+              height="auto"
+              data-setup="{}"
+          >
+            <source src="{% url 'video:stream' video.id %}" type="video/mp4"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/webm"/>
+            <source src="{% url 'video:stream' video.id %}" type="video/MOV"/>
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        {% if form.errors %}
+          {% for field in form %}
+            {% if field.errors %}
+              <div class="alert alert-danger">
+                {{ field.label|escape }}:
+                {% for error in field.errors %}
+                  {{ error|escape }}
+                {% endfor %}
+              </div>
+            {% endif %}
+          {% endfor %}
+          {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ error|escape }}
+            </div>
+          {% endfor %}
+        {% endif %}
+
+        {% if video.checklist %}
+
+        {% for check in video.checklist %}
+        <div class="form-group row my-3 p-3">
+        <p><h3><small class="text-muted">Чек-лист:</small> {{check.name }}</h3></p>
+        <p><small class="text-muted">Подразделение:</small> {{check.structural_subdivision }}</p>
+        <p><small class="text-muted">Проверяющий:</small> {{check.inspector }}</p>
+        {% comment %} {% for actions in check.actions%} {% endcomment %}
+        <table class="table table-sm">
+          <p><small class="text-muted">Замечания из чек-листа:</small></p>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Описание замечания</th>
+              <th scope="col">Оценка</th>
+              <th scope="col">Описание</th>
+            </tr>
+          </thead>
+          
+          <tbody>
+            {% for actions in check.actions%}
+              <tr>
+                <td scope="row">{{ actions.id }}</td>
+                <td scope="row">{{actions.personnel_action }}</td>
+                <td scope="row">{{actions.value }}</td>
+                <td scope="row">{{ check_list.video }}</td>
+                <td scope="row">{{actions.description }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% comment %} {% endfor %} {% endcomment %}
+        </div>
+        {% endfor %}
+
+        {% else %}
+
+        <form method="post" enctype="multipart/form-data" action="{% url 'video:video' pk=video.id %}">
+          {% csrf_token %}
+
+          <div class="form-group row my-3 p-3">
+            <h3>Чек-лист:</h3>
+           <label for="form.text.label">{{ form.video.label }}
+              <span class="required text-danger">*</span>                  
+            </label>
+            {{ form.video }}
+            <input type="hidden" name="{{ form.video.name }}" value="{{ form.video.value }}">
+            <small id="id_text-help" class="form-text text-muted">
+              заполняется автоматически
+            </small>
+          </div>
+
+          <script>
+            document.getElementById("id_video").disabled = true;
+          </script> 
+
+
+          <div class="form-group row my-3 p-3">
+            <label for="form.text.label">{{ form.record_date.label }}
+              <span class="required text-danger">*</span>                  
+            </label>
+            {{ form.record_date }}
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.name.record_date }}
+            </small>
+          </div>
+
+
+          <div class="form-group row my-3 p-3">
+            <label for="form.text.label">{{ form.name.label }}
+              <span class="required text-danger">*</span>                  
+            </label>
+            {{ form.name }}
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.name.help_text }}
+            </small>
+          </div>
+          <div class="form-group row my-3 p-3">
+            <label for="form.text.label"> Структурное подразделение
+              <span class="required text-danger">*</span>                  
+            </label>
+
+            <div class="form-image row my-3 p-3">
+              <label for="form.image.label" class="form-label">{{ form.structural_subdivision.label }}</label>
+              <label>
+                {{ form.structural_subdivision }}
+              </label>
+              <small id="id_text-help" class="form-text text-muted">
+                {{ form.structural_subdivision.help_text }}
+              </small>                    
+            </div>
+
+
+          </div>
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.working_place.label }}
+              <span class="required text-danger">*</span>  
+            </label>
+            <label>
+              {{ form.working_place }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.working_place.help_text }}
+            </small>                  
+          </div>
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.bp_number.label }}</label>
+            <label>
+              {{ form.bp_number }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.bp_number.help_text }}
+            </small>                  
+          </div>
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.working_person.label }}</label>
+            <label>
+              {{ form.working_person }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.working_person.help_text }}
+            </small>                    
+          </div>
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.controlling_person.label }}</label>
+            <label>
+              {{ form.controlling_person }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.controlling_person.help_text }}
+            </small>                    
+          </div>
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.recording_quality.label }}</label>
+            <label>
+              {{ form.recording_quality }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.recording_quality.help_text }}
+            </small>                    
+          </div>
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.inspector.label }}</label>
+            <label>
+              {{ form.inspector }}
+            </label>
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.inspector.help_text }}
+            </small>                    
+          </div>
+
+
+
+          <div class="form-image row my-3 p-3">
+            <label for="id_personnel_actions_values-0-personnel_action">Действия персонала:</label>
+
+            {{ formset.management_form }}
+
+            {% for formset_form in form.formset %}
+              
+                <select class="form-select row my-3 p-3" style="white-space: normal;" aria-label="Disabled select example" disabled>
+                    <option selected>Описание</option>
+                    <option{{ formset_form.personnel_action }}</option>
+                </select>
+
+                <div class="col-md-2">
+                  {% comment %} {{ formset_form.value.errors }} {% endcomment %}
+                  {{ formset_form.value.label_tag }}
+                  {{ formset_form.value }}
+
+              </div>
+              <div class="col-md-2">
+                  {% comment %} {{ formset_form.description.errors }} {% endcomment %}
+                  {{ formset_form.description.label_tag }}
+                  {{ formset_form.description }}
+
+
+                </div> 
+            
+                  <input type="hidden" name="{{ formset_form.prefix }}-check_list_id" value="{{ formset_form.check_list_id.value }}">
+                  <input type="hidden" name="{{ formset_form.prefix }}-personnel_action" value="{{ formset_form.personnel_action.value }}">
+              
+            {% endfor %}
+
+        </div>
+        
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.brif_conclusion.label }}</label>
+              {{ form.brif_conclusion }}
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.brif_conclusion.help_text }}
+            </small>                    
+          </div>
+
+          <div class="form-image row my-3 p-3">
+            <label for="form.image.label" class="form-label">{{ form.offer.label }}</label>
+              {{ form.offer }}
+            <small id="id_text-help" class="form-text text-muted">
+              {{ form.offer.help_text }}
+            </small>                    
+          
+            <div class="form-image row my-3 p-3">
+            </div>
+          <button type="submit" class="btn btn-primary">
+            
+            {% if is_edit %}
+              Сохранить
+            {% else %} 
+              Сохранить чек-лист
+            {% endif %} 
+          </button>
+          {% endif %}
+        </div>
+        <div class="d-flex justify-content-end"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
