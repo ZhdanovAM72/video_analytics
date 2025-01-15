@@ -100,7 +100,6 @@ def get_video(request, pk):
         form = CheckListForm(request.POST)
         form.video = video
         if form.is_valid():
-            # logging.info('>>>>>>>>>>>>after valid')
             check_list_instance = form.save(commit=False)
             check_list_instance.save()
 
@@ -136,7 +135,6 @@ def get_video(request, pk):
 
         return index(request)
     else:
-        # logging.info('>>>>>>>>>>>>else')
         form = CheckListForm(initial={'video': video})
 
     return render(request, 'video/video.html', {'form': form, 'video': video})

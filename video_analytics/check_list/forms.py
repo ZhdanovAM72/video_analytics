@@ -61,7 +61,9 @@ class CheckListForm(forms.ModelForm):
         for i, formset_form in enumerate(self.formset.forms):
             self.fields[f'personnelactionsvalue_set-{i}-value'] = forms.CharField(widget=forms.HiddenInput())
             self.fields[f'personnelactionsvalue_set-{i}-description'] = forms.CharField(widget=forms.HiddenInput())
-            self.fields[f'personnelactionsvalue_set-{i}-personnel_action'] = forms.IntegerField(widget=forms.HiddenInput())
+            self.fields[f'personnelactionsvalue_set-{i}-personnel_action'] = (
+                forms.IntegerField(widget=forms.HiddenInput())
+            )
 
     def save(self, commit=True):
         instance = super().save(commit=False)
