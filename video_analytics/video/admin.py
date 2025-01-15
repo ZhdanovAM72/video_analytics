@@ -5,7 +5,6 @@ from video.models import Group, Video, Status
 from check_list.models import CheckList
 
 
-# Register your models here.
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
     fields = ('name', 'slug', 'description')
