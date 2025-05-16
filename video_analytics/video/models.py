@@ -6,7 +6,7 @@ User = get_user_model()
 
 GREEN = '#008000'
 ORANGE = '#FF9900'
-RED = '#f44336'
+RED = '#FF0000'
 
 CHOICE_STATUS = (
     (GREEN, 'зеленый'),
