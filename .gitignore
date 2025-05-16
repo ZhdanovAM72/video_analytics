@@ -124,6 +124,7 @@ celerybeat.pid
 .venv
 env/
 venv/
+12venv/
 ENV/
 env.bak/
 venv.bak/
@@ -162,6 +163,7 @@ cython_debug/
 # Media files
 media/
 static/
+*.mp4
 
 # Develop files
 create_post.html
@@ -171,3 +173,6 @@ post_detail.html
 profile.html
 comments.html
 *.pdf
+
+# MacOS files
+*.DS_Store
